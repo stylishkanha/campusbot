@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>CampusBot — TERII Student Helpdesk</title>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:light;--bg:#f4f6ff;--panel:#fff;--panel2:#f7f8ff;--text:#1b2340;--muted:#6b7390;--line:#dfe4f4;--brand:#5965df;--brand2:#8064e9;--user:#565fdb;--bot:#eef1fb;--shadow:0 14px 40px rgba(32,43,95,.08);--ring:#6978fd;--ok:#13a486}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#111421;--panel:#1a2030;--panel2:#22283a;--text:#f0f1fc;--muted:#afb8d0;--line:#364054;--brand:#8392ff;--brand2:#ac8aff;--user:#555fc5;--bot:#2a3246;--shadow:0 15px 45px rgba(0,0,0,.2);--ring:#a2b1ff;--ok:#69d6b6}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text)}button,textarea{font:inherit}button{cursor:pointer;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);transition:transform .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease}button:hover:not(:disabled){transform:translateY(-2px);border-color:var(--brand);box-shadow:0 5px 18px rgba(93,102,221,.14)}button:active:not(:disabled){transform:scale(.96)}button:disabled{cursor:not-allowed;opacity:.48}button:focus-visible,textarea:focus-visible{outline:3px solid var(--ring);outline-offset:2px}button svg{width:18px;height:18px;flex-shrink:0}h1,h2,h3,p{margin-top:0}.app{display:grid;grid-template-columns:260px minmax(0,1fr) 265px;min-height:100dvh;max-height:100dvh;gap:16px;padding:16px;max-width:1700px;margin:0 auto}.sidebar,.insights,.chat{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);min-height:0}.sidebar{padding:20px;display:flex;flex-direction:column;gap:20px;overflow:auto}.logo{display:flex;align-items:center;gap:11px;font-size:19px;font-weight:800;letter-spacing:-.65px}.mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:grid;place-items:center;color:white;font-size:24px}.eyebrow{font-size:11px;letter-spacing:1.5px;font-weight:800;color:var(--muted);text-transform:uppercase;margin:0 0 12px}.btn{display:flex;align-items:center;justify-content:center;gap:9px;padding:12px 13px;font-weight:650}.primary{background:linear-gradient(120deg,#5965df,#8463ea);border-color:#6464dc;color:white}.primary:hover:not(:disabled){box-shadow:0 7px 19px rgba(93,102,221,.3)}.topics{display:grid;gap:6px}.topic-btn{width:100%;text-align:left;padding:11px 13px;display:flex;align-items:center;gap:11px;background:transparent;border-color:transparent;color:var(--muted);font-size:14px}.topic-btn:hover{background:var(--panel2);color:var(--text)}.topic-symbol{width:24px;text-align:center;font-size:17px}.side-bottom{margin-top:auto;display:grid;gap:10px}.small-card{background:var(--panel2);border:1px solid var(--line);padding:16px;border-radius:15px}.small-card h3{font-size:14px;margin-bottom:6px}.small-card p{font-size:12px;line-height:1.6;color:var(--muted);margin-bottom:0}.sidebar-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}.sidebar-actions button{padding:11px 5px;font-size:12px;display:flex;align-items:center;justify-content:center;gap:5px}.chat{display:flex;flex-direction:column;overflow:hidden}.chat-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:17px 21px;gap:12px}.bot-id{display:flex;align-items:center;gap:12px;min-width:0}.avatar{width:43px;height:43px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(135deg,#dcdfff,#f2eaff);color:#5965df;font-size:23px;flex-shrink:0}.bot-id h1{font-size:17px;letter-spacing:-.4px;margin:0 0 4px}.status{font-size:12px;color:var(--muted)}.dot{display:inline-block;width:7px;height:7px;margin-right:5px;border-radius:50%;background:var(--ok)}.header-actions{display:flex;gap:7px}.icon-btn{width:39px;height:39px;display:grid;place-items:center}.mobile-only{display:none}.messages{flex:1;min-height:0;overflow-y:auto;padding:23px 24px;display:flex;flex-direction:column;gap:19px;scroll-behavior:smooth;background:radial-gradient(circle at 50% 0%,rgba(107,115,238,.045),transparent 50%)}.hero{text-align:center;margin:12px auto 9px;max-width:490px}.hero-icon{font-size:28px;background:var(--panel2);width:64px;height:64px;display:grid;place-items:center;border:1px solid var(--line);border-radius:22px;margin:0 auto 13px}.hero h2{font-size:22px;letter-spacing:-.6px;margin-bottom:8px}.hero p{font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:0}.message{display:flex;gap:10px;max-width:88%;animation:appear .25s ease both}.message.user{align-self:flex-end;flex-direction:row-reverse}.message.bot{align-self:flex-start}.mini-avatar{width:29px;height:29px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);display:grid;place-items:center;flex-shrink:0;font-size:15px}.message.user .mini-avatar{background:#e8eaff;color:#5965df}.bubble{max-width:100%;padding:12px 15px;border-radius:15px;background:var(--bot);border:1px solid var(--line);line-height:1.55;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}.user .bubble{background:var(--user);color:#fff;border-color:transparent;border-top-right-radius:4px}.bot .bubble{border-top-left-radius:4px}.time{font-size:10px;color:var(--muted);margin-top:6px;padding:0 3px}.user .time{text-align:right}.response-suggestions{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.response-suggestions button{font-size:12px;padding:7px 10px;background:var(--panel)}.typing{display:flex;gap:4px;align-items:center;height:18px}.typing span{height:6px;width:6px;border-radius:50%;background:var(--muted);animation:pulse 1s ease-in-out infinite}.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}.chat-bottom{border-top:1px solid var(--line);padding:13px 20px 15px;background:var(--panel)}.quick-wrap{display:flex;gap:7px;overflow-x:auto;scrollbar-width:thin;padding-bottom:11px}.quick-wrap button{white-space:nowrap;padding:8px 12px;font-size:12px;background:var(--panel2)}.compose{display:flex;gap:10px;align-items:flex-end;padding:8px 8px 8px 15px;border:1px solid var(--line);background:var(--panel2);border-radius:15px}.compose:focus-within{border-color:var(--brand);box-shadow:0 0 0 2px rgba(100,111,240,.1)}textarea{resize:none;flex:1;border:0;outline:0!important;background:transparent;color:var(--text);min-height:40px;max-height:125px;padding:10px 0;line-height:1.5;font-size:14px;min-width:0}textarea::placeholder{color:var(--muted)}.send{min-width:46px;height:42px;border-radius:11px;padding:0 13px}.footnote{display:flex;justify-content:space-between;gap:12px;margin-top:9px;font-size:11px;color:var(--muted)}.insights{padding:23px 18px;overflow:auto}.insights h2{font-size:16px;letter-spacing:-.3px;margin-bottom:19px}.stat{display:flex;gap:11px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line)}.stat span:first-child{font-size:20px}.stat h3{margin:0 0 3px;font-size:13px}.stat p{font-size:12px;line-height:1.5;color:var(--muted);margin:0}.pipeline{display:grid;gap:6px;margin-top:14px}.step{padding:9px 11px;border-radius:9px;background:var(--panel2);color:var(--muted);font-size:12px;border:1px solid var(--line)}.note{font-size:12px;line-height:1.65;color:var(--muted);margin-top:18px}.overlay{display:none}.footer-credit{font-size:11px;color:var(--muted);text-align:center;padding-top:5px}@keyframes appear{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,65%,100%{opacity:.3;transform:translateY(0)}35%{opacity:1;transform:translateY(-3px)}}@media(max-width:1150px){.app{grid-template-columns:230px minmax(0,1fr)}.insights{display:none}}@media(max-width:740px){.app{display:block;padding:0;height:100dvh;min-height:100dvh}.chat{height:100dvh;border:0;border-radius:0}.mobile-only{display:grid}.sidebar{position:fixed;z-index:20;left:0;top:0;bottom:0;width:min(295px,86vw);border-radius:0 20px 20px 0;transform:translateX(-110%);transition:transform .25s ease}.sidebar.open{transform:translateX(0)}.overlay.open{display:block;position:fixed;inset:0;z-index:19;background:rgba(10,13,33,.54)}.chat-header{padding:12px 13px}.messages{padding:17px 13px}.message{max-width:96%}.chat-bottom{padding:10px 11px 12px}.header-actions .desktop-action{display:none}.bot-id h1{font-size:15px}.avatar{width:38px;height:38px}.hero{margin:9px auto}.hero h2{font-size:19px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="overlay" class="overlay"></div>
+<div class="app">
+  <aside class="sidebar" id="sidebar" aria-label="Navigation">
+    <div class="logo"><span class="mark" aria-hidden="true">✦</span> CampusBot <span style="font-size:11px;color:var(--muted);font-weight:650">TERII</span></div>
+    <button type="button" class="btn primary" id="newChatBtn">＋ New conversation</button>
+    <section><p class="eyebrow">Explore help topics</p><div class="topics" id="sidebarTopics"></div></section>
+    <div class="side-bottom">
+      <div class="small-card"><h3>✧ About CampusBot</h3><p>An offline, rule-based student helpdesk. Responses are selected from predefined rules, not generated by AI.</p></div>
+      <button type="button" class="btn" id="themeBtn">☾ Switch theme</button>
+      <div class="sidebar-actions"><button type="button" id="downloadBtn">⇩ Export TXT</button><button type="button" id="clearBtn">⌫ Clear chat</button></div>
+      <div class="footer-credit">TERII edition · College project · Verified source: terii.in</div>
+    </div>
+  </aside>
+  <main class="chat" aria-label="CampusBot chat">
+    <header class="chat-header">
+      <div class="bot-id"><button class="icon-btn mobile-only" type="button" id="menuBtn" aria-label="Open navigation menu" aria-expanded="false">☰</button><div class="avatar" aria-hidden="true">✦</div><div><h1>CampusBot · TERII Assistant</h1><div class="status"><span class="dot"></span>Ready · Offline rule-based assistant</div></div></div>
+      <div class="header-actions"><button type="button" id="headerDownload" class="icon-btn desktop-action" title="Download conversation" aria-label="Download conversation">⇩</button><button type="button" id="headerClear" class="icon-btn" title="Clear chat" aria-label="Clear chat">⌫</button></div>
+    </header>
+    <div class="messages" id="messages" role="log" aria-label="Chat messages" aria-live="polite" aria-relevant="additions text"></div>
+    <div class="chat-bottom">
+      <div class="quick-wrap" id="quickReplies" aria-label="Quick questions"></div>
+      <form id="chatForm" class="compose"><textarea id="messageInput" maxlength="500" rows="1" aria-label="Your message" placeholder="Ask about admissions, exams, library..." enterkeyhint="send"></textarea><button type="submit" id="sendBtn" class="btn primary send" aria-label="Send message">➤</button></form>
+      <div class="footnote"><span>Enter to send · Shift+Enter for new line</span><span id="charCounter">0 / 500</span></div>
+    </div>
+  </main>
+  <aside class="insights" aria-label="Project information">
+    <h2>Project overview</h2>
+    <p class="eyebrow">What can I help with?</p>
+    <div class="stat"><span>🎓</span><div><h3>College guidance</h3><p>Admissions, courses, departments and exams</p></div></div>
+    <div class="stat"><span>🏫</span><div><h3>Campus facilities</h3><p>Library, hostel, college hours and student support</p></div></div>
+    <div class="stat"><span>💼</span><div><h3>Career help</h3><p>Placements, internships and scholarships</p></div></div>
+    <p class="eyebrow" style="margin-top:27px">How it works</p>
+    <div class="pipeline"><div class="step">01 · Read question</div><div class="step">02 · Clean and normalize text</div><div class="step">03 · Exact pattern lookup</div><div class="step">04 · Score phrase and keyword rules</div><div class="step">05 · Show best answer or fallback</div></div>
+    <p class="note">ⓘ College details are based on terii.in, reviewed 21 Nov 2026. This offline chatbot cannot check live updates. Fee pages have differing amounts; verify the newest notice before payment.</p>
+  </aside>
+</div>
+<script>
+'use strict';
+/* CAMPUSBOT KNOWLEDGE BASE
+   Each rule contains sample question patterns and topic-specific words.
+   To teach CampusBot one more question, add it to the relevant patterns array.
+   To teach a new answer, add a new object with a unique id. */
+const chatbotRules = [
+/* TERII-specific knowledge from terii.in, reviewed 2026-11-21. */
+ {id:"college_identity",keywords:["terii", "college", "institute", "about"],patterns:["what is terii", "tell me about terii", "full form of terii", "about terii college", "when was terii founded"],response:"TERII stands for Technology Education and Research Integrated Institutions. It is based in Kurukshetra, Haryana, and its website says it was founded under Gyankund Foundation Trust in 2007. Source: https://terii.in/about/."},
+ {id:"college_affiliation",keywords:["affiliated", "affiliation", "university", "kuk"],patterns:["which university is terii affiliated to", "terii affiliation", "is terii affiliated to kuk", "which university is college affiliated with"],response:"TERII states that it is affiliated to Kurukshetra University (KUK) and approved by AICTE for relevant programmes. Official home: https://terii.in/."},
+ {id:"ai_ds_course",keywords:["ai ds", "ai and ds", "artificial intelligence and data science", "btech ai"],patterns:["does terii offer ai and data science", "btech ai ds course", "artificial intelligence and data science branch", "ai ds at terii"],response:"Yes. TERII lists B.Tech Artificial Intelligence & Data Science under its engineering programmes. B.Tech duration is listed as 4 years. Details: https://terii.in/programmes/programmes-eligibility/."},
+ {id:"bca_course",keywords:["bca", "cloud technology", "information security"],patterns:["is bca available", "bca course at terii", "bca duration", "bca cloud technology"],response:"TERII lists a 3-year BCA in Cloud Technology and Information Security. See https://terii.in/programmes/programmes-eligibility/ for details."},
+ {id:"mba_course",keywords:["mba", "management", "human resource", "marketing", "finance"],patterns:["is mba available", "mba at terii", "mba duration", "mba specializations"],response:"TERII lists an MBA of 2 years, with HR, Finance and Marketing areas. Check eligibility on https://terii.in/programmes/programmes-eligibility/."},
+ {id:"diploma_course",keywords:["diploma", "polytechnic", "leet"],patterns:["diploma courses at terii", "polytechnic courses", "diploma duration", "diploma leet duration"],response:"TERII lists 3-year diploma courses including Civil, Electrical, Mechanical, Computer Science and Medical Laboratory Technology; Diploma LEET is listed as 2 years. https://terii.in/programmes/programmes-eligibility/."},
+ {id:"library_bookbank",keywords:["book bank", "textbooks", "semester"],patterns:["does terii have book bank", "how many books can i take from book bank", "book bank facility", "library book bank"],response:"TERII says its library Book Bank lets students borrow 3 textbooks for the whole semester. Confirm current issue terms at the library. https://terii.in/campus/library/."},
+ {id:"hostel_separate",keywords:["girls hostel", "boys hostel", "separate hostel"],patterns:["does terii have girls hostel", "does terii have boys hostel", "separate hostel for girls", "separate hostel for boys"],response:"Yes. TERII describes separate in-campus hostels for boys and girls. Current seats depend on availability. See https://terii.in/admissions/hostel-admission/."},
+ {id:"college_location",keywords:["location", "where", "kurukshetra", "address"],patterns:["where is terii", "where is terii located", "terii location", "terii campus address"],response:"TERII is at 9th Milestone, Kaithal Road, Kurukshetra, Haryana 136119, India. Source: https://terii.in/contact-us/."},
+ {id:"admission_helpdesk",keywords:["admission helpline", "registrar", "finance controller"],patterns:["admission helpline number", "terii admission contact", "registrar phone number", "finance controller contact"],response:"TERII official admissions page lists admissions +91 9996783002, registrar +91 9996783008 and finance +91 9729011813 / +91 9729074245. Source: https://terii.in/admissions/."},
+ {id:"gym",keywords:["gym", "fitness", "exercise"],patterns:["does terii have a gym", "gym facility at terii", "is gym free"],response:"TERII FAQ states that the campus has a gym and it is available free to hostel residents. Please verify current access conditions. https://terii.in/faqs/."},
+ {id:"medical",keywords:["medical", "doctor", "healthcare", "ambulance"],patterns:["medical facility at terii", "is there a doctor on campus", "hostel medical facilities", "ambulance facility"],response:"TERII describes medical support for hostel residents, including a visiting practitioner and emergency arrangements. Confirm current details with the hostel warden. https://terii.in/faqs/."},
+ {id:"college_website",keywords:["official website", "website link", "terii website"],patterns:["what is terii official website", "give official website", "terii website link"],response:"TERII official website: https://terii.in/. This chatbot stores information offline; the website is needed for live updates."},
+ {id:'greeting',keywords:['hello','hi','hey','namaste','good morning','good evening'],patterns:['hello','hi','hey','namaste','good morning','good evening','good afternoon','hello campusbot'],response:"Hello! 👋 Welcome to TERII CampusBot. Ask me about TERII admissions, courses, fees, scholarships, library, hostel, placements and official contacts. Information is stored offline from terii.in; check the website for updates."},
+ {id:'thanks',keywords:['thanks','thank you','shukriya'],patterns:['thanks','thank you','thank you so much','shukriya'],response:'You are welcome! Feel free to ask another college-related question.'},
+ {id:'goodbye',keywords:['bye','goodbye','see you'],patterns:['bye','goodbye','see you later','see you'],response:'Goodbye! Have a great day and good luck with your studies!'},
+ {id:'help',keywords:['help','topics','what can you do','assist'],patterns:['help','what can you do','show topics','how can you help me','what should i ask'],response:"I can help with TERII courses, admission process and documents, KUK exams, fees, scholarships, library book bank, hostels, training and placements, campus facilities and contact details."},
+ {id:'admission_process',keywords:['admission','apply','enroll','registration'],patterns:['how can i apply for admission','how to apply for admission','admission process','admission procedure','how to get admission','how can i get admission','admission form','how do i enroll'],response:"TERII says admission to B.Tech, B.Tech LEET, Diploma, Diploma LEET and MBA has included Haryana state counselling for 75% seats and institute-level admission for remaining/vacant seats. Confirm the CURRENT admission process and applications at https://terii.in/admissions/ or call +91 9996783002."},
+ {id:'admission_eligibility',keywords:['admission','eligibility','eligible','qualification'],patterns:['admission eligibility','who is eligible for admission','eligibility criteria','minimum qualification for admission','can i apply after class 12'],response:"TERII lists course-specific eligibility on https://terii.in/programmes/programmes-eligibility/. For B.Tech, its eligibility table lists 45% marks in PCM at 10+2. For MBA it lists a bachelor degree with at least 50%; diploma generally requires passing Class 10 with stated conditions. Verify the latest applicable regulations."},
+ {id:'admission_documents',keywords:['admission','documents','certificate','required','paperwork'],patterns:['documents required for admission','what documents do i need for admission','admission documents','certificates for enrollment','what paperwork is needed for admission'],response:"TERII FAQ lists 10th and last-qualifying-exam marksheets, 10 coloured passport photographs, Aadhaar card, character certificate, migration certificate, and medical fitness certificate. Confirm the latest required documents at https://terii.in/faqs/ or with admissions."},
+ {id:'admission_deadline',keywords:['admission','last date','deadline','date','application'],patterns:['admission last date','what is admission deadline','when do admissions close','last date for application','when does admission start'],response:"TERII FAQ describes a general admission cutoff around 15 August, but this is NOT a confirmed current-year date. Check the new session notice at https://terii.in/admissions/ or call +91 9996783002 before relying on any deadline."},
+ {id:'courses',keywords:['courses','programs','degree','subjects','offered'],patterns:['which courses are available','what courses are offered','list of courses','available degree programs','what can i study here','tell me about courses'],response:"TERII lists B.Tech, B.Tech LEET, Diploma, Diploma LEET, BBA, BCA and MBA. B.Tech areas include AI & Data Science, Computer Science, Civil and Electrical & Electronics; diploma options include Computer Science, Civil, Electrical, Mechanical and Medical Laboratory Technology. See https://terii.in/programmes/programmes-eligibility/ for the latest list."},
+ {id:'departments',keywords:['department','departments','faculty','branches'],patterns:['what departments are there','list of departments','college branches','department information','which departments are available'],response:"TERII lists technical branches such as Computer Science (including AI & Data Science), Civil, Electrical & Electronics and diploma departments, plus management programmes. Current programme and institute details: https://terii.in/programmes/programmes-eligibility/."},
+ {id:'course_duration',keywords:['course','duration','years','semester'],patterns:['how long is the course','course duration','how many years is btech','number of semesters in a degree','degree duration'],response:"TERII programme page lists B.Tech 4 years, B.Tech LEET 3 years, MBA 2 years, BBA and BCA 3 years, Diploma 3 years and Diploma LEET 2 years. Check https://terii.in/programmes/programmes-eligibility/ for current course details."},
+ {id:'machine_learning',keywords:['machine learning','ml','predict','data patterns'],patterns:['what is machine learning','define machine learning','explain ml','what does machine learning mean'],response:'Machine Learning is a part of Artificial Intelligence that helps computers learn patterns from data and use them to make predictions or decisions.'},
+ {id:'artificial_intelligence',keywords:['artificial intelligence','ai','intelligent machines'],patterns:['what is artificial intelligence','define ai','explain artificial intelligence','what does ai mean'],response:'Artificial Intelligence (AI) is a field of computer science that builds systems to perform tasks that normally need human intelligence.'},
+ {id:'data_science',keywords:['data science','data scientist','data analysis'],patterns:['what is data science','define data science','what does a data scientist do'],response:'Data Science means using data, statistics and programming to find useful information and help make decisions.'},
+ {id:'exams_schedule',keywords:['exam','examination','timetable','date sheet','schedule'],patterns:['when are exams','examination schedule','exam timetable','exam date sheet','when is my next exam','when will exams start','exam dates'],response:"TERII is affiliated to Kurukshetra University. University examination schedules and TERII student notices can change. Check https://kuk.ac.in/ and https://terii.in/studentcorner/ or contact the exam cell for the latest date sheet."},
+ {id:'exam_form',keywords:['exam','form','registration','apply'],patterns:['exam form','how to fill exam form','exam form submission','register for exams','where to submit examination form','exam registration'],response:"For TERII exam forms, follow instructions from the TERII exam cell and Kurukshetra University. Check https://kuk.ac.in/ and https://terii.in/studentcorner/ for notices; deadlines and fees vary."},
+ {id:'exam_admit_card',keywords:['admit card','hall ticket','exam entry'],patterns:['how to download admit card','where is my hall ticket','exam admit card','when will admit cards be available'],response:"For TERII/KUK examination admit cards, follow the official exam-cell and Kurukshetra University instructions at https://kuk.ac.in/. Do not share login credentials in this chat."},
+ {id:'exam_results',keywords:['result','marks','grade','scorecard'],patterns:['exam results','how to check exam results','when will results be declared','where can i see my marks','download result','check semester result'],response:"TERII is affiliated to Kurukshetra University. Check official KUK examination results/announcements through https://kuk.ac.in/ and your department for guidance. CampusBot cannot view personal marks."},
+ {id:'exam_reappear',keywords:['reappear','backlog','supplementary','back paper'],patterns:['how to apply for reappear','backlog exam procedure','supplementary examination','how to clear back paper','reappear exam form'],response:"TERII students should follow Kurukshetra University and TERII exam-cell notices for reappear/backlog forms, date sheets and fees. Verify through https://kuk.ac.in/ and the college exam office."},
+ {id:'exam_revaluation',keywords:['revaluation','rechecking','recheck','answer sheet'],patterns:['how to apply for revaluation','can i request rechecking','exam answer sheet recheck','revaluation process'],response:"For TERII university result rechecking or revaluation, consult the current Kurukshetra University exam notice at https://kuk.ac.in/ and TERII exam cell. Application windows may be short."},
+ {id:'fees_payment',keywords:['fee','fees','payment','pay','tuition'],patterns:['how to pay college fees','fee payment procedure','where can i pay fees','how to pay tuition fee','college fee payment'],response:"For TERII fees, use ONLY the payment method approved by TERII or its finance office, and keep your receipt. The college offers an official Payments section on https://terii.in/. For payment support, its admissions page lists finance contacts +91 9729011813 and +91 9729074245."},
+ {id:'fees_amount',keywords:['fee','fees','amount','structure','cost'],patterns:['what is the college fee','fee structure','how much are tuition fees','course fee amount','total fee per semester'],response:"TERII publishes more than one fee table with DIFFERENT listed amounts. I cannot reliably name a current fee for your course. Check https://terii.in/admissions/terii-fee-structure/ and https://terii.in/fee-structure-fee-voucher/ and confirm the latest session-specific amount with TERII finance before payment."},
+ {id:'fees_deadline',keywords:['fee','fees','last date','deadline','due'],patterns:['fee payment last date','when are fees due','tuition fee deadline','last date to pay semester fee'],response:"A TERII fee page says semester fees are deposited by 10 May and 10 November, but this may not be the current deadline for your programme. Check the latest college/accounts notice. Source: https://terii.in/admissions/terii-fee-structure/."},
+ {id:'fees_receipt',keywords:['fee','receipt','payment proof','transaction'],patterns:['how to get fee receipt','download payment receipt','lost fee receipt','fee transaction confirmation'],response:"For TERII payment receipts or an unsuccessful transaction, contact TERII finance office with your receipt/transaction ID. Finance contacts listed: +91 9729011813 and +91 9729074245. Never share bank passwords in chat."},
+ {id:'scholarship_apply',keywords:['scholarship','apply','financial aid','grant'],patterns:['can i get scholarship','how to apply for scholarship','scholarship application process','where to apply for financial aid','apply for student grant'],response:"TERII describes its institute-level scholarships for meritorious/needy students and applicable government schemes. Ask TERII admissions/student support about the current application procedure. See https://terii.in/scholarships/ and https://terii.in/scholarship/."},
+ {id:'scholarship_eligibility',keywords:['scholarship','eligibility','eligible','criteria'],patterns:['who can get scholarship','scholarship eligibility','eligibility for financial aid','scholarship criteria'],response:"TERII says scholarships may include merit/need-based institute support and government tuition-fee-waiver schemes. Eligibility varies by scheme and session; confirm details at https://terii.in/scholarships/ and the admission office."},
+ {id:'scholarship_status',keywords:['scholarship','status','approved','pending'],patterns:['check scholarship status','when will scholarship arrive','scholarship payment status','is my scholarship approved'],response:"Check scholarship application progress on the official scheme portal or ask TERII administration. CampusBot has no access to individual student scholarship records. Source: https://terii.in/scholarships/."},
+ {id:'library_hours',keywords:['library','timing','timings','hours','open','close'],patterns:['what are library timings','library opening hours','when does library open','what time does library close','library hours'],response:"TERII describes its library as open during late hours and on off days, but the official library page does NOT give exact daily opening/closing times. Ask library staff for today’s hours. Source: https://terii.in/campus/library/."},
+ {id:'library_borrow',keywords:['library','borrow','issue','return','books'],patterns:['how to borrow books','library book issue process','how to return library books','can i borrow library books','book borrowing rules'],response:"TERII library has lending and book-bank services. Its official page says the Book Bank facility allows students to borrow 3 textbooks for a whole semester. Other borrowing rules, limits and due dates should be confirmed at the library desk. https://terii.in/campus/library/"},
+ {id:'library_card',keywords:['library','card','id','membership'],patterns:['how to get library card','library membership','do i need library id','apply for library card'],response:"TERII library uses a computerised book catalogue and barcode-based issue system. Ask the library help desk about your student ID or registration procedure. https://terii.in/campus/library/"},
+ {id:'library_facilities',keywords:['library','facilities','reading room','digital resources'],patterns:['what library facilities are available','library reading room','does library have computers','digital library resources'],response:"TERII describes an air-conditioned library with a reading room, lending/reference sections, books, periodicals, a book bank, digital resources and e-journals. Source: https://terii.in/campus/library/."},
+ {id:'hostel_apply',keywords:['hostel','apply','accommodation','room','allotment'],patterns:['how to apply for hostel','hostel admission procedure','how to get hostel room','hostel room allotment','student accommodation application'],response:"TERII has separate boys and girls hostels. Its hostel admissions page says regular students may apply and first-year seats are generally given on a first-come basis, subject to eligibility/merit and availability. Visit https://terii.in/admissions/hostel-admission/ or contact the hostel office."},
+ {id:'hostel_fees',keywords:['hostel','fee','fees','charges','rent'],patterns:['what is hostel fee','hostel charges','how much does hostel cost','hostel room rent'],response:"TERII fee page lists illustrative hostel charges of Rs 80,000 annually for AC flat occupancy and Rs 60,000 for 3-person occupancy, but these may not apply to the current session. Confirm current room availability and hostel charges with TERII. https://terii.in/admissions/terii-fee-structure/"},
+ {id:'hostel_rules',keywords:['hostel','rules','curfew','warden','visitors'],patterns:['hostel rules','what are hostel timings','hostel curfew','hostel visitor policy','who is hostel warden'],response:"TERII hostel admissions page describes residential wardens, security guards and CCTV. For current entry hours, visitor rules or room policies, contact the hostel warden. https://terii.in/admissions/hostel-admission/"},
+ {id:'hostel_food',keywords:['hostel','mess','food','meals'],patterns:['is hostel food available','hostel mess facilities','what is mess menu','hostel meal timings'],response:"TERII lists hostel boarding/lodging charges on its fee page. Please confirm current mess menu, timings and meal arrangements with the hostel office. https://terii.in/admissions/terii-fee-structure/"},
+ {id:'college_hours',keywords:['college','timings','hours','open','classes'],patterns:['what are college timings','when does college open','college opening hours','when do classes start','college working hours'],response:"I did not find a clearly verified current daily class timetable for all TERII departments. Ask your class coordinator or check TERII notices at https://terii.in/studentcorner/."},
+ {id:'holidays',keywords:['holiday','holidays','vacation','calendar'],patterns:['college holiday list','academic calendar','when is the next holiday','semester vacation dates'],response:"For TERII holidays, semester breaks and latest class/exam notices, check https://terii.in/studentcorner/ and Kurukshetra University at https://kuk.ac.in/."},
+ {id:'attendance',keywords:['attendance','absent','minimum attendance','present'],patterns:['minimum attendance required','attendance rules','how to check attendance','what happens with low attendance'],response:'Attendance requirements are set by your college or university. Ask your department or student portal for the current policy and your record.'},
+ {id:'placement',keywords:['placement','placements','recruitment','campus drive','jobs'],patterns:['how are college placements','placement opportunities','campus recruitment process','how to join placement drive','placement cell information'],response:"TERII has a Training and Placement Cell that offers career guidance, soft-skill training, group discussions and placement preparation activities. Actual placement drives and outcomes vary. See https://terii.in/placements/ or contact tpo@terii.in."},
+ {id:'internship',keywords:['internship','intern','training','industrial training'],patterns:['how to get an internship','internship opportunities','summer internship support','does college provide internships','industrial training information'],response:"TERII describes industry ties and a placement cell; its placement page mentions an AIESEC collaboration for internship facilitation. Ask the Training and Placement Cell about current opportunities: tpo@terii.in or https://terii.in/placements/."},
+ {id:'placement_training',keywords:['placement','aptitude','interview','resume','training'],patterns:['placement preparation training','resume help for placements','interview training','aptitude training for jobs'],response:"TERII says its Training and Placement Cell supports technical/soft skills, counselling, workshops and campus selection preparation. For current training dates contact tpo@terii.in. https://terii.in/placements/"},
+ {id:'contact',keywords:['contact','phone','email','address','reach'],patterns:['how to contact college','college contact number','college email address','where is the college located','college address','how to reach administration'],response:"TERII official contact: 9th Milestone, Kaithal Road, Kurukshetra, Haryana 136119, India. Phone: +91 9996783001 / +91 9996783002. General email: info@terii.in. Placement: tpo@terii.in. Website: https://terii.in/contact-us/."},
+ {id:'office',keywords:['office','administration','principal','reception'],patterns:['where is administration office','how to meet principal','student help desk location','contact administrative office'],response:"TERII official admissions page lists Registrar (academic queries): +91 9996783008; Finance: +91 9729011813 / +91 9729074245; admissions: +91 9996783002; director@terii.in for other queries. Confirm current availability: https://terii.in/admissions/."},
+ {id:'student_id',keywords:['student id','identity card','college id','id card'],patterns:['how to get student id card','lost college id card','replace identity card','where can i collect my id'],response:'For a new or replacement student ID, contact the administration or student affairs office and ask about the approved process.'},
+ {id:'wifi',keywords:['wifi','internet','campus network'],patterns:['is campus wifi available','how to access college wifi','college internet facilities','wifi password help'],response:'Ask the campus IT support team about student Wi-Fi access, login steps and usage rules. Do not share passwords in chat.'},
+ {id:'transport',keywords:['bus','transport','shuttle','route'],patterns:['college bus facility','transport routes','bus timings','how to use college transport'],response:"TERII admissions page mentions college buses serving nearby areas, but current routes, pickup times and charges need confirmation from TERII transport office. https://terii.in/admissions/."},
+ {id:'sports',keywords:['sports','gym','playground','games'],patterns:['sports facilities in college','is there a gym','college sports activities','playground facilities'],response:"TERII FAQ lists cricket and football grounds plus indoor games including badminton, table tennis, chess and carrom. It also mentions a gym free for hostel residents; confirm current rules at the sports office. https://terii.in/faqs/."},
+ {id:'clubs',keywords:['club','society','events','activities'],patterns:['how to join college clubs','student societies','technical events in college','college cultural activities'],response:"TERII lists student clubs and events, including a Training and Placement-related club. For membership and current events check https://terii.in/life-at-terii/clubs/."},
+ {id:'complaint',keywords:['complaint','grievance','issue','report problem'],patterns:['how to submit complaint','student grievance process','report a campus problem','where can i raise an issue'],response:"TERII official site provides a Student Grievance Form and anti-ragging information. Use the official student grievance link from https://terii.in/ or ask the administration. For immediate danger, contact campus security or local emergency services."},
+ {id:'certificate',keywords:['bonafide','certificate','transcript','migration'],patterns:['how to get bonafide certificate','request transcript','apply for migration certificate','student certificate process'],response:'Request academic certificates through the student services or registrar’s office. Ask about the form, proof required and processing time.'},
+ {id:'syllabus',keywords:['syllabus','curriculum','subjects','course outline'],patterns:['where can i find syllabus','download course syllabus','semester subject list','latest curriculum'],response:"TERII is affiliated to Kurukshetra University for programmes such as B.Tech. Find the relevant curriculum via https://kuk.ac.in/ or your TERII department. Syllabi can vary by admission batch."},
+ {id:'faculty',keywords:['teacher','faculty','professor','mentor'],patterns:['how to contact faculty','who is my class mentor','teacher office hours','faculty contact details'],response:'For faculty contacts or mentoring hours, consult the department office or official faculty directory.'},
+ {id:'canteen',keywords:['canteen','cafeteria','lunch','food'],patterns:['is there a canteen','canteen opening hours','college cafeteria facilities','where to get lunch'],response:"TERII About page mentions a campus cafeteria; I could not confirm current menu or hours. Ask the cafeteria/college office. https://terii.in/about/"}
+];
+
+const TOPICS=[
+ {name:'Admissions',icon:'🎓',question:'How can I apply for admission?'},
+ {name:'Courses',icon:'📚',question:'Which courses are available?'},
+ {name:'Exams',icon:'📝',question:'When are exams?'},
+ {name:'Fees',icon:'💳',question:'How to pay college fees?'},
+ {name:'Scholarships',icon:'🏅',question:'How to apply for scholarship?'},
+ {name:'Library',icon:'📖',question:'What are library timings?'},
+ {name:'Hostel',icon:'🏠',question:'How to apply for hostel?'},
+ {name:'Placements',icon:'💼',question:'How are college placements?'},
+ {name:'Contact',icon:'☎️',question:'How to contact college?'}
+];
+const STORAGE_HISTORY='campusbot.terii.history.v1';
+const STORAGE_THEME='campusbot.terii.theme.v1';
+const MAX_MESSAGES=250;
+const MAX_CHARS=500;
+const $=id=>document.getElementById(id);
+const messagesEl=$('messages'),inputEl=$('messageInput'),sendBtn=$('sendBtn');
+let chatHistory=[];
+let busy=false;
+let pendingTimer=null;
+let typingNode=null;
+let mobileMenuOpen=false;
+
+function normalizeText(text){
+ // Lowercase, simplify common misspellings, remove punctuation and extra spaces.
+ const alternatives={admissions:'admission',examinations:'exam',examination:'exam',results:'result',exams:'exam',scholarships:'scholarship',placements:'placement',internships:'internship',libraries:'library',timings:'timing',fees:'fee',courses:'course',documents:'document',hostels:'hostel',clg:'college',collage:'college',admisson:'admission',admisssion:'admission',libary:'library',librery:'library',scholorship:'scholarship',scholership:'scholarship',exm:'exam',examz:'exam',placment:'placement',placemnts:'placement',internsip:'internship',hostle:'hostel',timmings:'timing',timming:'timing',payement:'payment',availble:'available',availabe:'available',dept:'department',btech:'btech',ml:'ml',ai:'ai',whats:'what is',wanna:'want to'};
+ const plain=String(text).toLowerCase().replace(/[’']/g,'').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+ return plain.split(' ').map(word=>alternatives[word]||word).join(' ');
+}
+// Ignore question filler words. Words like "what" and "the" should not win matches.
+const STOP_WORDS=new Set('a an the is are was were am i me my you your we our to of for at on in it and or do does can could would should please tell give show about what which when where who how why there this that with from by have has get getting college student information details process procedure'.split(' '));
+const KEYWORD_STOP=new Set(['open','close','help','available','required','date','time','form','apply','how','what','when','where','about','college','student','information','details','procedure','process','check','download','current']);
+function significantTokens(str){return [...new Set(normalizeText(str).split(' ').filter(w=>w.length>1&&!STOP_WORDS.has(w)))];}
+function hasPhrase(text,phrase){return (' '+text+' ').includes(' '+normalizeText(phrase)+' ');}
+function findBestMatchingRule(message){
+ const query=normalizeText(message);
+ if(!query)return null;
+ // 1. Exact questions always beat fuzzy matching.
+ for(const rule of chatbotRules){if(rule.patterns.some(pattern=>normalizeText(pattern)===query))return {rule,score:100,matchType:'exact'};}
+ const queryTokens=significantTokens(query);
+ if(!queryTokens.length)return null;
+ let best=null;
+ for(const rule of chatbotRules){
+   let score=0;
+   let matchedTokens=new Set();
+   // 2. Compare meaningful words shared with each stored question.
+   for(const pattern of rule.patterns){
+     const patternText=normalizeText(pattern);
+     const patternTokens=significantTokens(patternText);
+     const overlap=patternTokens.filter(token=>queryTokens.includes(token));
+     const coverage=overlap.length/Math.max(1,patternTokens.length);
+     const precision=overlap.length/Math.max(1,queryTokens.length);
+     let candidate=coverage*6+precision*4;
+     if(query.length>=5&&hasPhrase(query,patternText))candidate+=9;
+     if(patternTokens.length>=2&&overlap.length===patternTokens.length)candidate+=3;
+     if(overlap.length===0)candidate=0;
+     if(candidate>score){score=candidate;matchedTokens=new Set(overlap);}
+   }
+   // 3. Topic words add points, but generic terms alone cannot trigger a match.
+   const keywordMatches=rule.keywords.filter(k=>!KEYWORD_STOP.has(normalizeText(k))&&hasPhrase(query,k));
+   const keywordScore=Math.min(keywordMatches.length*2.2,6.6);
+   score+=keywordScore;
+   const informative=keywordMatches.some(k=>significantTokens(k).some(w=>w.length>=3)) || [...matchedTokens].some(t=>t.length>=3);
+   if(!informative)continue;
+   // A specific topic is important for broad questions, but must not override specific subtopics.
+   if(!best||score>best.score)best={rule,score,matchType:'scored'};
+ }
+ // Minimum confidence threshold prevents random words from producing an answer.
+ return best&&best.score>=5.0?best:null;
+}
+function generateBotResponse(message){
+ const result=findBestMatchingRule(message);
+ return result?{text:result.rule.response,matched:true,ruleId:result.rule.id}:{text:"Sorry, I couldn't understand your question. You can ask about admissions, exams, fees, library, hostel, or placements.",matched:false,ruleId:null};
+}
+function formatTime(iso){const date=new Date(iso);return Number.isNaN(date.getTime())?'':date.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});}
+function saveChatHistory(){
+ try{localStorage.setItem(STORAGE_HISTORY,JSON.stringify(chatHistory.slice(-MAX_MESSAGES)));return true;}
+ catch(error){console.warn('Chat history could not be saved:',error);return false;}
+}
+function loadChatHistory(){
+ try{
+  const saved=JSON.parse(localStorage.getItem(STORAGE_HISTORY)||'[]');
+  if(!Array.isArray(saved))return [];
+  return saved.filter(item=>item&&['user','bot'].includes(item.role)&&typeof item.text==='string'&&item.text.length<=1500&&typeof item.time==='string'&&!Number.isNaN(Date.parse(item.time))).slice(-MAX_MESSAGES);
+ }catch(error){console.warn('Chat history could not be restored:',error);return [];}
+}
+function scrollToBottom(){messagesEl.scrollTop=messagesEl.scrollHeight;}
+function makeSuggestionButtons(container){
+ const row=document.createElement('div');row.className='response-suggestions';
+ TOPICS.slice(0,6).forEach(topic=>{const btn=document.createElement('button');btn.type='button';btn.textContent=topic.name;btn.addEventListener('click',()=>sendMessage(topic.question));row.appendChild(btn);});
+ container.appendChild(row);
+}
+function addMessageToChat(role,text,time=new Date().toISOString(),suggest=false){
+ const wrapper=document.createElement('div');wrapper.className='message '+role;
+ const avatar=document.createElement('div');avatar.className='mini-avatar';avatar.textContent=role==='bot'?'✦':'●';avatar.setAttribute('aria-hidden','true');
+ const body=document.createElement('div');const bubble=document.createElement('div');bubble.className='bubble';
+ // Security: never use innerHTML for messages; textContent displays input as text.
+ bubble.textContent=text;body.appendChild(bubble);
+ const timeEl=document.createElement('div');timeEl.className='time';timeEl.textContent=formatTime(time);body.appendChild(timeEl);
+ if(suggest)makeSuggestionButtons(body);
+ wrapper.append(avatar,body);messagesEl.appendChild(wrapper);scrollToBottom();return wrapper;
+}
+function renderHero(){const hero=document.createElement('div');hero.className='hero';const icon=document.createElement('div');icon.className='hero-icon';icon.textContent='✦';const title=document.createElement('h2');title.textContent='Welcome to TERII CampusBot';const p=document.createElement('p');p.textContent='Ask about TERII courses, admission, scholarships, library, hostel, placement and campus life. Answers come from fixed rules, not live AI.';hero.append(icon,title,p);messagesEl.appendChild(hero);}
+function restoreChat(){messagesEl.replaceChildren();renderHero();chatHistory.forEach(entry=>addMessageToChat(entry.role,entry.text,entry.time,entry.fallback===true));scrollToBottom();}
+function showTypingIndicator(){
+ removeTypingIndicator();typingNode=document.createElement('div');typingNode.className='message bot';typingNode.setAttribute('aria-label','CampusBot is typing');
+ const avatar=document.createElement('div');avatar.className='mini-avatar';avatar.textContent='✦';
+ const bubble=document.createElement('div');bubble.className='bubble typing';
+ for(let i=0;i<3;i++)bubble.appendChild(document.createElement('span'));
+ typingNode.append(avatar,bubble);messagesEl.appendChild(typingNode);scrollToBottom();
+}
+function removeTypingIndicator(){if(typingNode){typingNode.remove();typingNode=null;}}
+function appendToHistory(role,text,fallback=false){const record={role,text,time:new Date().toISOString(),fallback};chatHistory.push(record);if(chatHistory.length>MAX_MESSAGES)chatHistory=chatHistory.slice(-MAX_MESSAGES);addMessageToChat(role,text,record.time,fallback);saveChatHistory();}
+function updateForm(){const value=inputEl.value;const trimmed=value.trim();$('charCounter').textContent=value.length+' / '+MAX_CHARS;sendBtn.disabled=busy||trimmed.length===0||value.length>MAX_CHARS;inputEl.style.height='auto';inputEl.style.height=Math.min(inputEl.scrollHeight,125)+'px';}
+function sendMessage(text){
+ if(busy)return;
+ const raw=typeof text==='string'?text:inputEl.value;
+ const clean=raw.trim();
+ if(!clean||clean.length>MAX_CHARS)return;
+ busy=true;inputEl.value='';appendToHistory('user',clean);updateForm();showTypingIndicator();
+ const response=generateBotResponse(clean);
+ pendingTimer=window.setTimeout(()=>{
+  pendingTimer=null;removeTypingIndicator();appendToHistory('bot',response.text,!response.matched);busy=false;updateForm();inputEl.focus();
+ },480);
+}
+function cancelPending(){if(pendingTimer!==null){clearTimeout(pendingTimer);pendingTimer=null;}removeTypingIndicator();busy=false;updateForm();}
+function resetChat(){cancelPending();chatHistory=[];saveChatHistory();restoreChat();appendToHistory('bot','Hello! 👋 Welcome to TERII CampusBot. I can help with TERII admissions, courses, fees, scholarships, the library, hostels, placements, and contacts. My source is terii.in (reviewed 21 Nov 2026). For changing dates and fees, always verify official notices.');}
+function clearChatHistory(){if(!confirm('Delete all saved messages and start a new conversation?'))return;resetChat();closeMenu();}
+function downloadChatHistory(){
+ const lines=['CampusBot — TERII Student Helpdesk Chat','Exported: '+new Date().toLocaleString(),'—'.repeat(30),'',...chatHistory.map(m=>'['+new Date(m.time).toLocaleString()+'] '+(m.role==='user'?'You':'CampusBot')+': '+m.text),''];
+ const blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='CampusBot-chat-'+new Date().toISOString().slice(0,10)+'.txt';document.body.appendChild(a);a.click();a.remove();window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function toggleTheme(){const next=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=next;updateThemeLabel();try{localStorage.setItem(STORAGE_THEME,next)}catch(error){console.warn('Theme setting could not be saved:',error);}}
+function updateThemeLabel(){$('themeBtn').textContent=document.documentElement.dataset.theme==='dark'?'☀ Switch to light':'☾ Switch to dark';}
+function closeMenu(){mobileMenuOpen=false;$('sidebar').classList.remove('open');$('overlay').classList.remove('open');$('menuBtn').setAttribute('aria-expanded','false');}
+function openMenu(){mobileMenuOpen=true;$('sidebar').classList.add('open');$('overlay').classList.add('open');$('menuBtn').setAttribute('aria-expanded','true');}
+function buildTopicButtons(){
+ TOPICS.forEach(topic=>{const nav=document.createElement('button');nav.type='button';nav.className='topic-btn';const icon=document.createElement('span');icon.className='topic-symbol';icon.textContent=topic.icon;const text=document.createElement('span');text.textContent=topic.name;nav.append(icon,text);nav.addEventListener('click',()=>{closeMenu();sendMessage(topic.question)});$('sidebarTopics').appendChild(nav);
+ const quick=document.createElement('button');quick.type='button';quick.textContent=topic.name;quick.addEventListener('click',()=>sendMessage(topic.question));$('quickReplies').appendChild(quick);});
+}
+function init(){
+ buildTopicButtons();try{const savedTheme=localStorage.getItem(STORAGE_THEME);document.documentElement.dataset.theme=savedTheme==='dark'?'dark':'light';}catch(error){document.documentElement.dataset.theme='light';}
+ updateThemeLabel();chatHistory=loadChatHistory();if(!chatHistory.length)resetChat();else restoreChat();
+ $('chatForm').addEventListener('submit',event=>{event.preventDefault();sendMessage();});
+ inputEl.addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();sendMessage();}});
+ inputEl.addEventListener('input',updateForm);updateForm();
+ $('clearBtn').addEventListener('click',clearChatHistory);$('headerClear').addEventListener('click',clearChatHistory);
+ $('newChatBtn').addEventListener('click',()=>{if(chatHistory.length>2&&!confirm('Start a new conversation? This will replace the current saved chat.'))return;resetChat();closeMenu();});
+ $('downloadBtn').addEventListener('click',downloadChatHistory);$('headerDownload').addEventListener('click',downloadChatHistory);
+ $('themeBtn').addEventListener('click',toggleTheme);
+ $('menuBtn').addEventListener('click',()=>mobileMenuOpen?closeMenu():openMenu());$('overlay').addEventListener('click',closeMenu);
+ document.addEventListener('keydown',event=>{if(event.key==='Escape')closeMenu();});
+ window.addEventListener('resize',()=>{if(window.innerWidth>740)closeMenu();});
+}
+init();
+</script>
+</body>
+</html>
